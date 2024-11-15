@@ -2,60 +2,109 @@
 #include <string.h>
 #include <ctype.h>
 
-// Структура для хранения данных о студенте
-struct Student {
-    char name[50];
-    char surname[50];
-    char birthdate[11];  // формат: "ДД.ММ.ГГГГ"
-};
+char *name = NULL;
+char *surname = NULL;
+char *birthdate = NULL;
+char *specialization = NULL;
 
-// Проверка корректности даты (формат "ДД.ММ.ГГГГ")
-int is_valid_date(const char *date) {
-    if (strlen(date) != 10 || date[2] != '.' || date[5] != '.')
+int is_valid_date(char *date)
+{
+    if (date[2] != '.' || date[5] != '.')
         return 0;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++)
+    {
         if (i != 2 && i != 5 && !isdigit(date[i]))
             return 0;
     }
     return 1;
 }
 
-// Функция ввода данных о студенте
-int input_student(struct Student *student) {
-    printf("Введите имя: ");
-    scanf("%49s", student->name);
-    
-    printf("Введите фамилию: ");
-    scanf("%49s", student->surname);
-    
-    printf("Введите дату рождения (ДД.ММ.ГГГГ): ");
-    scanf("%10s", student->birthdate);
-    
-    // Проверка правильности введенных данных
-    if (!is_valid_date(student->birthdate)) {
-        printf("Ошибка: Неверный формат даты рождения.\n");
-        return 0;
+void input_student()
+{
+    size_t len;
+
+    int is_valid = 0;
+
+    while (!is_valid)
+    {
+        printf("Enter NAME (no more than 30 symbols): ");
+        getline(&name, &len, stdin);
+
+        if (strlen(name) < 30)
+        {   
+            is_valid = 1;
+        }
+        else
+        {
+            printf("Should be less than 30 symbols\n");
+        }
     }
-    return 1;
+
+    is_valid = 0;
+    while (!is_valid)
+    {
+        printf("Enter SURNAME (no more than 30 symbols): ");
+
+        getline(&surname, &len, stdin);
+
+        if (strlen(surname) < 30)
+        {
+            is_valid = 1;
+        }
+        else
+        {
+            printf("Should be less than 30 symbols\n");
+        }
+    }
+
+    is_valid = 0;
+    while (!is_valid)
+    {
+        printf("Enter DATE OF BIRTH (DD.MM.YYYY): ");
+        getline(&birthdate, &len, stdin);
+
+        if (is_valid_date(birthdate))
+        {
+            is_valid = 1;
+        }
+        else
+        {
+            printf("Wrong date format. Please try again.\n");
+        }
+    }
+
+    is_valid = 0;
+    while (!is_valid)
+    {
+        printf("Enter SPECIALISATION (no more than 20 symbols): ");
+        getline(&specialization, &len, stdin);
+        if (strlen(specialization) < 20)
+        {
+            is_valid = 1;
+        }
+        else
+        {
+            printf("Should be less than 20 symbols\n");
+        }
+    }
 }
 
-// Функция вывода карточки студента
-void print_student(const struct Student *student) {
-    printf("\n--- Карточка студента ---\n");
-    printf("Имя: %s\n", student->name);
-    printf("Фамилия: %s\n", student->surname);
-    printf("Дата рождения: %s\n", student->birthdate);
-    printf("-------------------------\n");
+void print_student()
+{
+    printf("\n********************************************************\n");
+    printf("\n----------------------- STIDENT-------------------------\n");
+    printf("Name - %s", name);
+    printf("Surname -  %s", surname);
+    printf("Date of Birth -  %s", birthdate);
+    printf("Specialisation -  %s", specialization);
+    printf("----------------------------------------------------------\n");
 }
 
-int main() {
-    struct Student student;
-    
-    if (input_student(&student)) {
-        print_student(&student);
-    } else {
-        printf("Пожалуйста, исправьте ошибки и попробуйте снова.\n");
-    }
-    
+int main()
+{
+
+    input_student();
+    print_student();
+
     return 0;
 }
